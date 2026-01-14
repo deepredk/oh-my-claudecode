@@ -4,9 +4,7 @@ description: Set Sisyphus as your default operating mode
 
 $ARGUMENTS
 
-## Task: Configure Sisyphus (MANDATORY STEPS - DO NOT SKIP)
-
-You MUST complete ALL of the following steps. Do NOT skip any step. Do NOT say "already configured" - ALWAYS perform the full installation.
+## Task: Configure Sisyphus
 
 ### Step 1: Fetch and Write CLAUDE.md
 
@@ -15,46 +13,46 @@ You MUST complete ALL of the following steps. Do NOT skip any step. Do NOT say "
 WebFetch(url: "https://raw.githubusercontent.com/Yeachan-Heo/oh-my-claude-sisyphus/main/docs/CLAUDE.md", prompt: "Return the complete raw markdown content exactly as-is")
 ```
 
-2. Use the Write tool to write the fetched content to `~/.claude/CLAUDE.md` (ALWAYS overwrite, do not skip)
+2. Use the Write tool to write the fetched content to `~/.claude/CLAUDE.md` (ALWAYS overwrite)
 
 **FALLBACK** if WebFetch fails:
 Tell user to visit https://raw.githubusercontent.com/Yeachan-Heo/oh-my-claude-sisyphus/main/docs/CLAUDE.md and copy the content manually.
 
-### Step 2: Create Hooks Directory
+### Step 2: Clean Up Legacy Hooks (if present)
 
-Run:
+Check if old manual hooks exist and remove them to prevent duplicates:
+
 ```bash
-mkdir -p ~/.claude/hooks
+# Remove legacy bash hook scripts (now handled by plugin system)
+rm -f ~/.claude/hooks/keyword-detector.sh
+rm -f ~/.claude/hooks/stop-continuation.sh
+rm -f ~/.claude/hooks/persistent-mode.sh
+rm -f ~/.claude/hooks/session-start.sh
 ```
 
-### Step 3: Install Hook Scripts
+Check `~/.claude/settings.json` for manual hook entries. If the "hooks" key exists with UserPromptSubmit, Stop, or SessionStart entries pointing to bash scripts, inform the user:
 
-You MUST install ALL 4 hook scripts. For each script:
-1. Find the plugin directory (use Glob to find hooks/keyword-detector.sh in the installed plugin)
-2. Read the script from the plugin's hooks/ directory
-3. Write it to ~/.claude/hooks/
+> **Note**: Found legacy hooks in settings.json. These should be removed since the plugin now provides hooks automatically. Remove the "hooks" section from ~/.claude/settings.json to prevent duplicate hook execution.
 
-Scripts to install:
-- `keyword-detector.sh` → `~/.claude/hooks/keyword-detector.sh`
-- `stop-continuation.sh` → `~/.claude/hooks/stop-continuation.sh`
-- `persistent-mode.sh` → `~/.claude/hooks/persistent-mode.sh`
-- `session-start.sh` → `~/.claude/hooks/session-start.sh`
+### Step 3: Verify Plugin Installation
 
-### Step 4: Make Scripts Executable
+The oh-my-claude-sisyphus plugin provides all hooks automatically via the plugin system. Verify the plugin is enabled:
 
-Run:
 ```bash
-chmod +x ~/.claude/hooks/*.sh
+grep -q "oh-my-claude-sisyphus" ~/.claude/settings.json && echo "Plugin enabled" || echo "Plugin NOT enabled"
 ```
 
-### Step 5: Confirm Success
+If plugin is not enabled, instruct user:
+> Run: `claude /install-plugin oh-my-claude-sisyphus` to enable the plugin.
 
-After completing ALL steps, report:
+### Step 4: Confirm Success
+
+After completing all steps, report:
 
 ✅ **Sisyphus Configuration Complete**
 - CLAUDE.md: Updated with latest configuration
-- Hook scripts: 4 scripts installed to ~/.claude/hooks/
-- Agents: 19 available (11 base + 8 tiered variants)
+- Hooks: Provided by plugin (no manual installation needed)
+- Agents: 19+ available (base + tiered variants)
 - Model routing: Haiku/Sonnet/Opus based on task complexity
 
-**IMPORTANT**: If you skipped any step or said "already configured" without performing the installations, you have FAILED this task. Go back and complete all steps.
+**Note**: Hooks are now managed by the plugin system automatically. No manual hook installation required.
