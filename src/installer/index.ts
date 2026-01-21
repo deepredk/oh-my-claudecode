@@ -48,7 +48,7 @@ export const VERSION_FILE = join(CLAUDE_CONFIG_DIR, '.omc-version.json');
 export const CORE_COMMANDS: string[] = [];
 
 /** Current version */
-export const VERSION = '3.2.1';
+export const VERSION = '3.2.2';
 
 /** Installation result */
 export interface InstallResult {
@@ -443,8 +443,8 @@ export function install(options: InstallOptions = {}): InstallResult {
         '    return;',
         '  } catch { /* continue */ }',
         '  ',
-        '  // 4. Fallback: minimal HUD',
-        '  console.log("[OMC] active");',
+        '  // 4. Fallback: suggest setup',
+        '  console.log("[OMC] run /omc-setup to install properly");',
         '}',
         '',
         'main();',
