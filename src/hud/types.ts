@@ -4,6 +4,11 @@
  * Type definitions for the HUD state, configuration, and rendering.
  */
 
+import type { AutopilotStateForHud } from './elements/autopilot.js';
+
+// Re-export for convenience
+export type { AutopilotStateForHud };
+
 // ============================================================================
 // HUD State
 // ============================================================================
@@ -126,6 +131,7 @@ export interface PrdStateForHud {
   total: number;
 }
 
+
 // ============================================================================
 // Render Context
 // ============================================================================
@@ -156,6 +162,9 @@ export interface HudRenderContext {
 
   /** PRD state */
   prd: PrdStateForHud | null;
+
+  /** Autopilot state */
+  autopilot: AutopilotStateForHud | null;
 
   /** Active subagents from transcript */
   activeAgents: ActiveAgent[];
@@ -207,6 +216,7 @@ export interface HudElementConfig {
   omcLabel: boolean;
   rateLimits: boolean;  // Show 5h and weekly rate limits
   ralph: boolean;
+  autopilot: boolean;
   prdStory: boolean;
   activeSkills: boolean;
   lastSkill: boolean;
@@ -244,6 +254,7 @@ export const DEFAULT_HUD_CONFIG: HudConfig = {
     omcLabel: true,
     rateLimits: true,  // Show rate limits by default
     ralph: true,
+    autopilot: true,
     prdStory: true,
     activeSkills: true,
     contextBar: true,
@@ -270,6 +281,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     omcLabel: true,
     rateLimits: true,
     ralph: true,
+    autopilot: true,
     prdStory: false,
     activeSkills: true,
     lastSkill: true,
@@ -287,6 +299,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     omcLabel: true,
     rateLimits: true,
     ralph: true,
+    autopilot: true,
     prdStory: true,
     activeSkills: true,
     lastSkill: true,
@@ -304,6 +317,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     omcLabel: true,
     rateLimits: true,
     ralph: true,
+    autopilot: true,
     prdStory: true,
     activeSkills: true,
     lastSkill: true,
@@ -321,6 +335,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     omcLabel: true,
     rateLimits: false,
     ralph: true,
+    autopilot: true,
     prdStory: false,
     activeSkills: true,
     lastSkill: true,
@@ -338,6 +353,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     omcLabel: true,
     rateLimits: true,
     ralph: true,
+    autopilot: true,
     prdStory: true,
     activeSkills: true,
     lastSkill: true,

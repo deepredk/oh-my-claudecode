@@ -39,6 +39,10 @@ import {
 } from '../ralph-verifier/index.js';
 import { checkIncompleteTodos, getNextPendingTodo, StopContext, isUserAbort } from '../todo-continuation/index.js';
 import { TODO_CONTINUATION_PROMPT } from '../../installer/hooks.js';
+import {
+  isAutopilotActive
+} from '../autopilot/index.js';
+import { checkAutopilot } from '../autopilot/enforcement.js';
 
 export interface PersistentModeResult {
   /** Whether to block the stop event */
@@ -46,7 +50,7 @@ export interface PersistentModeResult {
   /** Message to inject into context */
   message: string;
   /** Which mode triggered the block */
-  mode: 'ralph' | 'ultrawork' | 'todo-continuation' | 'none';
+  mode: 'ralph' | 'ultrawork' | 'todo-continuation' | 'autopilot' | 'none';
   /** Additional metadata */
   metadata?: {
     todoCount?: number;
@@ -54,6 +58,9 @@ export interface PersistentModeResult {
     maxIterations?: number;
     reinforcementCount?: number;
     todoContinuationAttempts?: number;
+    phase?: string;
+    tasksCompleted?: number;
+    tasksTotal?: number;
   };
 }
 
@@ -453,6 +460,25 @@ export async function checkPersistentModes(
   const ralphResult = await checkRalphLoop(sessionId, workingDir);
   if (ralphResult?.shouldBlock) {
     return ralphResult;
+  }
+
+  // Priority 1.5: Autopilot (full orchestration mode - higher than ultrawork, lower than ralph)
+  if (isAutopilotActive(workingDir)) {
+    const autopilotResult = await checkAutopilot(sessionId, workingDir);
+    if (autopilotResult?.shouldBlock) {
+      return {
+        shouldBlock: true,
+        message: autopilotResult.message,
+        mode: 'autopilot',
+        metadata: {
+          iteration: autopilotResult.metadata?.iteration,
+          maxIterations: autopilotResult.metadata?.maxIterations,
+          phase: autopilotResult.phase,
+          tasksCompleted: autopilotResult.metadata?.tasksCompleted,
+          tasksTotal: autopilotResult.metadata?.tasksTotal
+        }
+      };
+    }
   }
 
   // Priority 2: Ultrawork Mode (performance mode with persistence)

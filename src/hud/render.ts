@@ -17,6 +17,7 @@ import { renderRateLimits } from './elements/limits.js';
 import { renderPermission } from './elements/permission.js';
 import { renderThinking } from './elements/thinking.js';
 import { renderSession } from './elements/session.js';
+import { renderAutopilot } from './elements/autopilot.js';
 
 /**
  * Render the complete statusline (single or multi-line)
@@ -59,6 +60,12 @@ export function render(context: HudRenderContext, config: HudConfig): string {
   if (enabledElements.ralph && context.ralph) {
     const ralph = renderRalph(context.ralph, config.thresholds);
     if (ralph) elements.push(ralph);
+  }
+
+  // Autopilot state (takes precedence over ralph in display)
+  if (enabledElements.autopilot && context.autopilot) {
+    const autopilot = renderAutopilot(context.autopilot, config.thresholds);
+    if (autopilot) elements.push(autopilot);
   }
 
   // PRD story

@@ -95,3 +95,16 @@ export {
   formatCancelMessage,
   type CancelResult
 } from './cancel.js';
+
+// Signal detection
+export {
+  detectSignal,
+  getExpectedSignalForPhase,
+  detectAnySignal
+} from './signals.js';
+
+// Enforcement
+export {
+  checkAutopilot,
+  type AutopilotEnforcementResult
+} from './enforcement.js';

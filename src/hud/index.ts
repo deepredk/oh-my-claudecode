@@ -13,6 +13,7 @@ import {
   readRalphStateForHud,
   readUltraworkStateForHud,
   readPrdStateForHud,
+  readAutopilotStateForHud,
 } from './omc-state.js';
 import { getUsage } from './usage-api.js';
 import { render } from './render.js';
@@ -49,8 +50,8 @@ async function main(): Promise<void> {
     const stdin = await readStdin();
 
     if (!stdin) {
-      // No stdin - output placeholder
-      console.log('[OMC] waiting...');
+      // No stdin - suggest setup
+      console.log('[OMC] run /omc-setup to install properly');
       return;
     }
 
@@ -63,6 +64,7 @@ async function main(): Promise<void> {
     const ralph = readRalphStateForHud(cwd);
     const ultrawork = readUltraworkStateForHud(cwd);
     const prd = readPrdStateForHud(cwd);
+    const autopilot = readAutopilotStateForHud(cwd);
 
     // Read HUD state for background tasks
     const hudState = readHudState(cwd);
@@ -83,6 +85,7 @@ async function main(): Promise<void> {
       ralph,
       ultrawork,
       prd,
+      autopilot,
       activeAgents: transcriptData.agents.filter((a) => a.status === 'running'),
       todos: transcriptData.todos,
       backgroundTasks: getRunningTasks(hudState),
@@ -101,8 +104,8 @@ async function main(): Promise<void> {
     const formattedOutput = output.replace(/ /g, '\u00A0');
     console.log(formattedOutput);
   } catch (error) {
-    // On any error, show minimal fallback
-    console.log('[OMC] error');
+    // On any error, suggest setup
+    console.log('[OMC] run /omc-setup to install properly');
   }
 }
 
