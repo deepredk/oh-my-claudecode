@@ -547,7 +547,7 @@ Background agents can be resumed with full context via `resume-session` tool.
 Version 3.1 is a drop-in upgrade. No migration required!
 
 ```bash
-npm update -g oh-my-claudecode
+npm update -g oh-my-claude-sisyphus
 ```
 
 All existing configurations, plans, and workflows continue working unchanged.
@@ -694,7 +694,7 @@ Users set their default mode preference via `/oh-my-claudecode:omc-setup`.
 Version 3.4.0 is a drop-in upgrade. No migration required!
 
 ```bash
-npm update -g oh-my-claudecode
+npm update -g oh-my-claude-sisyphus
 ```
 
 All existing configurations, plans, and workflows continue working unchanged.
